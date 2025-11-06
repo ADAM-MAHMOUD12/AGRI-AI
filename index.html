@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الزراعة الذكية - تحسين الموارد</title>
+    <!-- تحميل مكتبة Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- تحميل خط Inter كخط افتراضي -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- تحميل خط عربي مناسب (مثل Cairo أو Hacen) - سنستخدم Inter ونضبط fallback عربي -->
+    <style>
+        :root {
+            font-family: 'Inter', sans-serif;
+        }
+        /* تخصيص إضافي لخطوط عربية إذا كانت متاحة */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 sm:p-8">
+
+    <div id="app" class="max-w-4xl mx-auto">
+
+        <!-- العنوان الرئيسي والوصف -->
+        <header class="text-center mb-10 p-6 bg-white rounded-xl shadow-lg">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-green-700 mb-2">منصة الزراعة الذكية (Agri-AI)</h1>
+            <p class="text-gray-600 text-lg">تحليل بالذكاء الاصطناعي لتحسين كفاءة استخدام المياه والأسمدة في مزرعتك.</p>
+        </header>
+
+        <!-- قسم الإدخال -->
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl mb-10 border-t-4 border-green-600">
+            <h2 class="text-2xl font-bold text-green-800 mb-6 border-b pb-3">إدخال بيانات المزرعة</h2>
+
+            <form id="farm-data-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- حقل نوع المحصول -->
+                <div>
+                    <label for="crop_type" class="block text-sm font-medium text-gray-700 mb-2">نوع المحصول الحالي:</label>
+                    <input type="text" id="crop_type" value="قمح" required
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition duration-150"
+                           placeholder="مثل: قمح، طماطم، عنب">
+                </div>
+
+                <!-- حقل حجم الحقل (بالمتر المربع) -->
+                <div>
+                    <label for="field_size" class="block text-sm font-medium text-gray-700 mb-2">حجم الحقل (بالمتر المربع):</label>
+                    <input type="number" id="field_size" value="10000" required min="1"
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition duration-150"
+                           placeholder="أدخل الحجم بالمتر المربع">
+                </div>
+
+                <!-- حقل نوع التربة -->
+                <div>
+                    <label for="soil_type" class="block text-sm font-medium text-gray-700 mb-2">نوع التربة:</label>
+                    <select id="soil_type" required
+                            class="w-full p-3 border border-gray-300 bg-white rounded-lg focus:ring-green-500 focus:border-green-500 transition duration-150">
+                        <option value="طينية" selected>طينية</option>
+                        <option value="رملية">رملية</option>
+                        <option value="طميية">طميية</option>
+                        <option value="جيرية">جيرية</option>
+                    </select>
+                </div>
+
+                <!-- حقل الاستخدام الحالي للمياه (متر مكعب) -->
+                <div>
+                    <label for="current_water" class="block text-sm font-medium text-gray-700 mb-2">الاستخدام الحالي للمياه (متر مكعب/أسبوع):</label>
+                    <input type="number" id="current_water" value="150" required min="0"
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition duration-150"
+                           placeholder="الكمية الحالية بالمتر المكعب">
+                </div>
+
+                <!-- حقل الاستخدام الحالي للأسمدة (بالمتر المربع) -->
+                <div class="md:col-span-2">
+                    <label for="current_fertilizer" class="block text-sm font-medium text-gray-700 mb-2">نوع وكمية السماد الحالي (مثال: NPK 20-20-20 بمقدار 5 جرام/متر مربع):</label>
+                    <input type="text" id="current_fertilizer" value="NPK 20-20-20 بمقدار 5 جرام/متر مربع شهرياً" required
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition duration-150"
+                           placeholder="أدخل تفاصيل السماد بوحدات مترية">
+                </div>
+
+                <!-- زر التحليل -->
+                <div class="md:col-span-2 mt-4">
+                    <button type="submit" id="analyze-button"
+                            class="w-full bg-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 shadow-md hover:shadow-lg flex items-center justify-center disabled:opacity-50">
+                        <span id="button-text">تحليل وتحسين الموارد بالذكاء الاصطناعي</span>
+                        <svg id="loading-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- قسم النتائج -->
+        <div id="results-section" class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl hidden border-t-4 border-blue-600">
+            <h2 class="text-2xl font-bold text-blue-800 mb-6 border-b pb-3 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                </svg>
+                نتائج التحليل والتوصيات
+            </h2>
+
+            <div id="loading-error-message" class="text-red-600 bg-red-100 p-4 rounded-lg hidden mb-4"></div>
+
+            <div id="ai-output" class="space-y-6">
+                <!-- سيتم عرض نتائج الذكاء الاصطناعي هنا -->
+            </div>
+        </div>
+
+        <!-- معلومات حول API -->
+        <footer class="text-center mt-10 text-gray-500 text-sm">
+            <p> يتم استخدام ADAM (API)لتحليل المعلومات .</p>
+        </footer>
+    </div>
+
+    <script type="module">
+        // الثوابت العالمية المتوفرة في بيئة Canvas
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        // تم تحديث مفتاح API بمفتاح OpenRouter المقدم
+        const apiKey = "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"; 
+
+        // اسم النموذج الذي سيتم استخدامه (إصدار OpenRouter المشابه لـ Gemini Flash)
+        const modelName = 'google/gemini-2.5-flash';
+        // نقطة نهاية OpenRouter API
+        const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
+
+        // عناصر واجهة المستخدم
+        const form = document.getElementById('farm-data-form');
+        const resultsSection = document.getElementById('results-section');
+        const aiOutputDiv = document.getElementById('ai-output');
+        const analyzeButton = document.getElementById('analyze-button');
+        const buttonText = document.getElementById('button-text');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const errorMessageDiv = document.getElementById('loading-error-message');
+
+        // دالة المساعد لتحويل البيانات إلى تنسيق JSON عربي
+        function formatDataForAI(data) {
+            return `
+                بيانات المزرعة للتحليل:
+                - نوع المحصول: ${data.crop_type}
+                - حجم الحقل: ${data.field_size} متر مربع
+                - نوع التربة: ${data.soil_type}
+                - الاستخدام الحالي للمياه: ${data.current_water} متر مكعب/أسبوع
+                - الاستخدام الحالي للأسمدة: ${data.current_fertilizer}
+
+                الرجاء تحليل هذه البيانات وتقديم توصيات مُحسّنة في تنسيق JSON باللغة العربية. يجب أن تكون جميع التوصيات الخاصة بالقياسات بالوحدات المترية (متر مربع، متر مكعب، كجم، جرام).
+            `;
+        }
+
+        // دالة لعرض النتائج في واجهة المستخدم
+        function displayResults(data) {
+            aiOutputDiv.innerHTML = `
+                <!-- تحليل عام -->
+                <div class="p-5 bg-blue-50 rounded-lg border border-blue-200">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-2 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                        </svg>
+                        التحليل العام:
+                    </h3>
+                    <p class="text-gray-700 whitespace-pre-wrap">${data['تحليل_عام']}</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <!-- التوفير المتوقع -->
+                    <div class="p-5 bg-green-100 rounded-lg border border-green-300 sm:col-span-1">
+                        <h3 class="text-xl font-semibold text-green-700 mb-2 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414L11 10.586V6z" clip-rule="evenodd" />
+                            </svg>
+                            التوفير المتوقع
+                        </h3>
+                        <p class="text-green-800 font-bold text-lg whitespace-pre-wrap">${data['توفير_متوقع']}</p>
+                    </div>
+
+                    <!-- توصية الري -->
+                    <div class="p-5 bg-blue-100 rounded-lg border border-blue-300 sm:col-span-2">
+                        <h3 class="text-xl font-semibold text-blue-700 mb-2 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M11 3a1 1 0 100 2h2.276a1 1 0 01.996.883L16 16.5A1.5 1.5 0 0114.5 18h-9A1.5 1.5 0 014 16.5L6.728 5.883A1 1 0 017.724 5H10zm3.385 1.5l-2 8.41a1 1 0 01-.98.79H7.615a1 1 0 01-.98-.79l-2-8.41h7.75z" />
+                            </svg>
+                            توصية الري
+                        </h3>
+                        <p class="text-gray-700 whitespace-pre-wrap">${data['توصية_الري']}</p>
+                    </div>
+                </div>
+
+                <!-- توصية الأسمدة -->
+                <div class="p-5 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <h3 class="text-xl font-semibold text-yellow-700 mb-2 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M7 3a1 1 0 00-1 1v1a1 1 0 002 0V4a1 1 0 00-1-1zM5 7h4a1 1 0 000-2H5a1 1 0 000 2zm10 0h-4a1 1 0 100 2h4a1 1 0 100-2zM4 9a1 1 0 000 2h2a1 1 0 100-2H4zm10 0h2a1 1 0 100-2h-2a1 1 0 100 2zM9 13v1a1 1 0 002 0v-1a1 1 0 00-2 0zM8 11h4a1 1 0 100-2H8a1 1 0 100 2zM4 13h2a1 1 0 100-2H4a1 1 0 100 2zm10 0h2a1 1 0 100-2h-2a1 1 0 100 2zM7 15h4a1 1 0 100-2H7a1 1 0 100 2zM4 17h2a1 1 0 100-2H4a1 1 0 100 2zM10 18a1 1 0 001-1v-2a1 1 0 10-2 0v2a1 1 0 001 1z" />
+                        </svg>
+                        توصية الأسمدة
+                    </h3>
+                    <p class="text-gray-700 whitespace-pre-wrap">${data['توصية_الأسمدة']}</p>
+                </div>
+            `;
+            resultsSection.classList.remove('hidden');
+        }
+
+        // دالة تنفيذ الاتصال بواجهة برمجة تطبيقات OpenRouter (تم تكييفها)
+        async function callAI(prompt, retryCount = 0) {
+            // إظهار حالة التحميل
+            analyzeButton.disabled = true;
+            buttonText.textContent = 'جاري التحليل...';
+            loadingSpinner.classList.remove('hidden');
+            errorMessageDiv.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            aiOutputDiv.innerHTML = '';
+
+            // تم تعديل systemPrompt لطلب إخراج JSON محدد بدقة
+            const systemPrompt = `أنت خبير ذكاء اصطناعي زراعي متخصص في تحسين الموارد. بناءً على بيانات المزرعة المدخلة، قدم تحليلاً دقيقًا وتوصيات مُحسّنة لاستخدام المياه والأسمدة. يجب أن يكون الناتج بتنسيق JSON صارم باللغة العربية ويستخدم الحقول التالية فقط: "تحليل_عام" (تحليل شامل لوضع المزرعة الحالي)، "توصية_الري" (اقتراح لجدول ري محسّن)، "توصية_الأسمدة" (اقتراح لتركيبة سمادية)، "توفير_متوقع" (نسبة التوفير المتوقعة في المياه والأسمدة). يجب أن تستخدم جميع التوصيات القياسات المترية (المتر، المتر المربع، المتر المكعب).`;
+
+            // هيكل الحمولة (Payload) الخاص بـ OpenRouter/Chat Completions
+            const payload = {
+                model: modelName,
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: prompt }
+                ],
+                // طلب إخراج JSON لتحسين الموثوقية (مدعوم من العديد من النماذج على OpenRouter)
+                response_format: { type: "json_object" },
+                temperature: 0.2, // درجة حرارة منخفضة لنتائج أكثر واقعية
+                // تحديد الحد الأقصى للرموز
+                max_tokens: 2048
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`, // استخدام مفتاح OpenRouter
+                        // ممارسات OpenRouter الموصى بها
+                        'HTTP-Referer': window.location.href, 
+                        'X-Title': 'Agri-AI Optimizer App'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    // محاولة قراءة نص الخطأ لطباعته
+                    const errorDetails = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status}. Details: ${errorDetails}`);
+                }
+
+                const result = await response.json();
+                // استخراج المحتوى من استجابة Chat Completions
+                const jsonText = result.choices?.[0]?.message?.content;
+
+                if (!jsonText) {
+                    throw new Error("لم يتم الحصول على محتوى استجابة صالح من الذكاء الاصطناعي.");
+                }
+
+                // تحليل النص JSON
+                const parsedData = JSON.parse(jsonText);
+
+                // التأكد من أن جميع الحقول المطلوبة موجودة
+                if (!parsedData['تحليل_عام'] || !parsedData['توصية_الري']) {
+                     throw new Error("الاستجابة من الذكاء الاصطناعي غير مكتملة أو لا تتوافق مع التنسيق المطلوب.");
+                }
+
+                displayResults(parsedData);
+
+            } catch (error) {
+                console.error("AI API Call Failed (OpenRouter):", error);
+
+                if (retryCount < 3) {
+                    const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    console.log(`Retrying AI call (Attempt ${retryCount + 2})...`);
+                    await callAI(prompt, retryCount + 1);
+                    return;
+                }
+
+                errorMessageDiv.textContent = `فشل التحليل: حدث خطأ أثناء الاتصال بواجهة برمجة تطبيقات OpenRouter. يرجى التأكد من صحة المفتاح والمدخلات. (${error.message})`;
+                errorMessageDiv.classList.remove('hidden');
+
+            } finally {
+                // إخفاء حالة التحميل
+                analyzeButton.disabled = false;
+                buttonText.textContent = 'تحليل وتحسين الموارد بالذكاء الاصطناعي';
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+
+        // معالج إرسال النموذج
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const farmData = {
+                crop_type: document.getElementById('crop_type').value,
+                field_size: document.getElementById('field_size').value,
+                soil_type: document.getElementById('soil_type').value,
+                current_water: document.getElementById('current_water').value,
+                current_fertilizer: document.getElementById('current_fertilizer').value,
+            };
+
+            const userPrompt = formatDataForAI(farmData);
+            await callAI(userPrompt);
+        });
+
+    </script>
+</body>
+</html>
