@@ -32,7 +32,6 @@
 </head>
 <body class="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans">
   <div id="app" class="max-w-6xl mx-auto">
-
     <div class="text-center mb-6">
       <h2 class="text-2xl font-extrabold text-secondary-blue-700 bg-secondary-blue-50 p-3 rounded-full inline-block shadow-md">
         🤝 معًا لمستقبل زراعي رقمي 🌾
@@ -48,10 +47,6 @@
       </p>
     </header>
 
-    <div id="impact-image-section" class="mb-12 rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-200">
-      <img id="impact-image" src="https://placehold.co/1200x400/15803d/ffffff?text=AGRI-AI" alt="AGRI-AI" class="w-full h-auto object-cover" />
-    </div>
-
     <section class="mb-12">
       <h2 class="text-3xl font-extrabold text-primary-green-700 mb-6 text-center">نتائج الأثر والتحسين الفوري 🚀</h2>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -62,7 +57,7 @@
       </div>
     </section>
 
-    <!-- نموذج إدخال البيانات -->
+    <!-- نموذج إدخال -->
     <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-2xl mb-12 border-l-4 border-primary-green-600">
       <h2 class="text-3xl font-extrabold text-primary-green-700 mb-8 border-b-2 pb-4 border-gray-200">إدخال بيانات المزرعة للتحليل 🤖</h2>
       <form id="farm-data-form" class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -90,27 +85,17 @@
         </div>
         <div class="md:col-span-2 mt-6">
           <button id="analyze-button" type="submit" class="w-full bg-primary-green-600 text-white font-bold text-xl py-4 rounded-xl shadow-lg hover:bg-primary-green-700">
-            <span id="button-text">تحليل وتحسين الموارد بالذكاء الاصطناعي</span>
+            تحليل وتحسين الموارد بالذكاء الاصطناعي
           </button>
         </div>
       </form>
     </div>
 
-    <!-- حالة التحميل -->
-    <div id="loading-state" class="hidden bg-white p-10 rounded-3xl shadow-2xl mb-12 border-b-8 border-accent-yellow text-center animate-pulse">
-      <p class="text-3xl font-extrabold text-primary-green-800 mb-3">جاري تحليل البيانات...</p>
-      <p class="text-xl text-gray-500">نستخدم خوارزميات ذكية لتحقيق أفضل النتائج.</p>
+    <div id="loading-state" class="hidden text-center text-xl font-bold text-primary-green-700 animate-pulse">⏳ جاري التحليل...</div>
+    <div id="results-section" class="hidden bg-white p-6 rounded-3xl shadow-xl border-l-4 border-secondary-blue-600">
+      <h2 class="text-3xl font-bold text-secondary-blue-700 mb-6">نتائج التحليل 💡</h2>
+      <div id="ai-output" class="text-gray-700 text-lg whitespace-pre-line"></div>
     </div>
-
-    <!-- النتائج -->
-    <div id="results-section" class="hidden bg-white p-6 sm:p-10 rounded-3xl shadow-2xl border-l-4 border-secondary-blue-600">
-      <h2 class="text-3xl font-extrabold text-secondary-blue-700 mb-8 border-b-2 pb-4 border-gray-200">نتائج التحليل 💡</h2>
-      <div id="ai-output" class="space-y-10 text-gray-700"></div>
-    </div>
-
-    <footer class="text-center mt-12 text-gray-500 text-sm">
-      <p>مدعوم بواسطة <span class="text-secondary-blue-600 font-semibold">AGRI-AI</span></p>
-    </footer>
   </div>
 
   <script>
@@ -135,32 +120,19 @@
       };
 
       try {
-        // الاتصال الحقيقي بسيرفر الباك إند
         const response = await fetch(apiUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
 
-        if (!response.ok) throw new Error("فشل الاتصال بالسيرفر");
-
         const data = await response.json();
-
-        aiOutput.innerHTML = `
-          <div class="bg-gray-100 p-6 rounded-2xl shadow-inner">
-            <h3 class="text-xl font-bold mb-3 text-secondary-blue-800 border-b pb-2">نتيجة التحليل:</h3>
-            <p class="text-lg leading-relaxed whitespace-pre-line">${data.message || data.result || JSON.stringify(data, null, 2)}</p>
-          </div>
-        `;
-      } catch (error) {
-        aiOutput.innerHTML = `
-          <p class="text-red-600 p-4 border border-red-200 bg-red-50 rounded-lg">
-            ⚠️ حدث خطأ أثناء الاتصال بالسيرفر: ${error.message}
-          </p>`;
+        aiOutput.innerText = data.message || "لم يتم تلقي استجابة من الخادم.";
+      } catch (err) {
+        aiOutput.innerHTML = `<p class='text-red-600'>⚠️ خطأ: ${err.message}</p>`;
       } finally {
         loadingState.classList.add("hidden");
         resultsSection.classList.remove("hidden");
-        resultsSection.scrollIntoView({ behavior: "smooth" });
       }
     });
   </script>
