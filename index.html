@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌱 منصة الزراعة الذكية - معًا لمستقبل زراعي رقمي</title>
+  <title>🌱 منصة الزراعة الذكية - Agri-AI</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
   <script>
@@ -13,7 +13,8 @@
           colors: {
             'primary-green': { 600: '#16a34a', 700: '#15803d', 800: '#14532d', 50: '#f0fdf4' },
             'secondary-blue': { 600: '#2563eb', 700: '#1d4ed8', 50: '#eff6ff' },
-            'accent-yellow': '#facc15'
+            'accent-yellow': '#facc15',
+            'soft-gray': '#f8fafc'
           },
           fontFamily: { sans: ['Inter', 'sans-serif'] }
         }
@@ -21,81 +22,90 @@
     };
   </script>
   <style>
-    #rotating-tip-card, #impact-image-section { transition: opacity 0.7s ease-in-out; }
-    .fade-in { opacity: 1; }
-    .fade-out { opacity: 0; }
     input:focus, select:focus {
       border-color: #16a34a;
       box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.3);
     }
+    .fade-in {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body class="bg-gray-50 min-h-screen p-4 sm:p-8 font-sans">
-  <div id="app" class="max-w-6xl mx-auto">
-    <div class="text-center mb-6">
-      <h2 class="text-2xl font-extrabold text-secondary-blue-700 bg-secondary-blue-50 p-3 rounded-full inline-block shadow-md">
-        🤝 معًا لمستقبل زراعي رقمي 🌾
-      </h2>
-    </div>
+  <div class="max-w-6xl mx-auto">
 
+    <!-- العنوان -->
     <header class="text-center mb-10 p-8 bg-white rounded-3xl shadow-2xl border-t-8 border-primary-green-600">
       <h1 class="text-4xl sm:text-6xl font-black text-primary-green-800 mb-3">
         🌱 منصة الزراعة الذكية (<span class="text-secondary-blue-600">Agri-AI</span>)
       </h1>
       <p class="text-gray-600 text-xl font-medium">
-        تحليل متقدم بالذكاء الاصطناعي لـ <span class="text-primary-green-600 font-bold">تحسين كفاءة</span> استخدام المياه والأسمدة.
+        استخدم الذكاء الاصطناعي لتحليل وتحسين موارد المزرعة بكفاءة وذكاء.
       </p>
     </header>
 
-    <section class="mb-12">
-      <h2 class="text-3xl font-extrabold text-primary-green-700 mb-6 text-center">نتائج الأثر والتحسين الفوري 🚀</h2>
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <div class="bg-white border-b-4 border-secondary-blue-600 p-5 rounded-2xl shadow-xl text-center">💧 توفير المياه 25%+</div>
-        <div class="bg-white border-b-4 border-primary-green-600 p-5 rounded-2xl shadow-xl text-center">🌿 تقليل الأسمدة 18%+</div>
-        <div class="bg-white border-b-4 border-accent-yellow p-5 rounded-2xl shadow-xl text-center">🌾 زيادة المحصول 10%+</div>
-        <div class="bg-white border-b-4 border-red-500 p-5 rounded-2xl shadow-xl text-center">💰 خفض التكلفة 15%+</div>
-      </div>
-    </section>
-
-    <!-- نموذج إدخال -->
+    <!-- نموذج الإدخال -->
     <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-2xl mb-12 border-l-4 border-primary-green-600">
-      <h2 class="text-3xl font-extrabold text-primary-green-700 mb-8 border-b-2 pb-4 border-gray-200">إدخال بيانات المزرعة للتحليل 🤖</h2>
+      <h2 class="text-3xl font-extrabold text-primary-green-700 mb-8 border-b-2 pb-4 border-gray-200">🧠 إدخال بيانات المزرعة للتحليل</h2>
       <form id="farm-data-form" class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <label class="block mb-2 font-semibold text-gray-700">نوع المحصول:</label>
+          <label class="block mb-2 font-semibold text-gray-700">🌾 نوع المحصول:</label>
           <input id="crop_type" value="طماطم" required class="w-full p-4 border rounded-xl" />
         </div>
         <div>
-          <label class="block mb-2 font-semibold text-gray-700">حجم الحقل (م²):</label>
+          <label class="block mb-2 font-semibold text-gray-700">🌍 حجم الحقل (م²):</label>
           <input id="field_size" type="number" value="10000" required class="w-full p-4 border rounded-xl" />
         </div>
         <div>
-          <label class="block mb-2 font-semibold text-gray-700">نوع التربة:</label>
+          <label class="block mb-2 font-semibold text-gray-700">🧱 نوع التربة:</label>
           <select id="soil_type" class="w-full p-4 border rounded-xl">
             <option>طينية</option><option>رملية</option><option>طميية</option><option>جيرية</option>
           </select>
         </div>
         <div>
-          <label class="block mb-2 font-semibold text-gray-700">الاستخدام الحالي للمياه (م³/أسبوع):</label>
+          <label class="block mb-2 font-semibold text-gray-700">💧 استهلاك المياه (م³/أسبوع):</label>
           <input id="current_water" type="number" value="150" required class="w-full p-4 border rounded-xl" />
         </div>
         <div class="md:col-span-2">
-          <label class="block mb-2 font-semibold text-gray-700">نوع وكمية السماد:</label>
+          <label class="block mb-2 font-semibold text-gray-700">🧪 نوع وكمية السماد:</label>
           <input id="current_fertilizer" value="NPK 20-20-20 بمقدار 5 جم/م²" class="w-full p-4 border rounded-xl" />
         </div>
         <div class="md:col-span-2 mt-6">
-          <button id="analyze-button" type="submit" class="w-full bg-primary-green-600 text-white font-bold text-xl py-4 rounded-xl shadow-lg hover:bg-primary-green-700">
-            تحليل وتحسين الموارد بالذكاء الاصطناعي
+          <button id="analyze-button" type="submit" class="w-full bg-primary-green-600 text-white font-bold text-xl py-4 rounded-xl shadow-lg hover:bg-primary-green-700 transition-all duration-300">
+            🚀 تحليل الموارد بالذكاء الاصطناعي
           </button>
         </div>
       </form>
     </div>
 
-    <div id="loading-state" class="hidden text-center text-xl font-bold text-primary-green-700 animate-pulse">⏳ جاري التحليل...</div>
-    <div id="results-section" class="hidden bg-white p-6 rounded-3xl shadow-xl border-l-4 border-secondary-blue-600">
-      <h2 class="text-3xl font-bold text-secondary-blue-700 mb-6">نتائج التحليل 💡</h2>
-      <div id="ai-output" class="text-gray-700 text-lg whitespace-pre-line"></div>
+    <!-- حالة التحميل -->
+    <div id="loading-state" class="hidden text-center text-xl font-bold text-primary-green-700 animate-pulse">
+      ⏳ جاري تحليل البيانات... نرجو الانتظار قليلًا.
     </div>
+
+    <!-- النتائج -->
+    <div id="results-section" class="hidden bg-white p-6 sm:p-10 rounded-3xl shadow-2xl border-l-4 border-secondary-blue-600 fade-in">
+      <h2 class="text-3xl font-extrabold text-secondary-blue-700 mb-8 border-b-2 pb-4 border-gray-200">📊 نتائج التحليل</h2>
+
+      <!-- بطاقات نسب التحسين -->
+      <div id="stats-cards" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+        <!-- يتم تعبئتها عبر JS -->
+      </div>
+
+      <!-- جدول التوصيات -->
+      <div id="recommendation-table" class="mb-8"></div>
+
+      <!-- شرح الذكاء الاصطناعي -->
+      <div id="ai-output" class="bg-soft-gray p-6 rounded-2xl shadow-inner text-gray-700 text-lg leading-relaxed whitespace-pre-line"></div>
+    </div>
+
+    <footer class="text-center mt-12 text-gray-500 text-sm">
+      <p>🌿 <span class="font-semibold text-primary-green-700">Agri-AI</span> - المستقبل الزراعي الذكي © 2025</p>
+    </footer>
   </div>
 
   <script>
@@ -105,6 +115,8 @@
     const loadingState = document.getElementById("loading-state");
     const resultsSection = document.getElementById("results-section");
     const aiOutput = document.getElementById("ai-output");
+    const statsCards = document.getElementById("stats-cards");
+    const recommendationTable = document.getElementById("recommendation-table");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -127,12 +139,65 @@
         });
 
         const data = await response.json();
-        aiOutput.innerText = data.message || "لم يتم تلقي استجابة من الخادم.";
+        const text = data.message || "لم يتم تلقي استجابة من الخادم.";
+
+        // تقسيم النتائج إلى أجزاء
+        aiOutput.textContent = text;
+
+        // بطاقات النسب (عينة تجريبية — يمكن تعديلها حسب مخرجات الذكاء الاصطناعي)
+        statsCards.innerHTML = `
+          <div class="bg-primary-green-50 p-5 rounded-2xl shadow text-center border-b-4 border-primary-green-600">
+            <h3 class="text-2xl font-bold text-primary-green-700">💧 25%</h3>
+            <p class="text-gray-600 font-semibold">توفير المياه</p>
+          </div>
+          <div class="bg-secondary-blue-50 p-5 rounded-2xl shadow text-center border-b-4 border-secondary-blue-600">
+            <h3 class="text-2xl font-bold text-secondary-blue-700">🌿 18%</h3>
+            <p class="text-gray-600 font-semibold">تقليل السماد</p>
+          </div>
+          <div class="bg-yellow-50 p-5 rounded-2xl shadow text-center border-b-4 border-yellow-400">
+            <h3 class="text-2xl font-bold text-yellow-600">🌾 12%</h3>
+            <p class="text-gray-600 font-semibold">زيادة المحصول</p>
+          </div>
+          <div class="bg-red-50 p-5 rounded-2xl shadow text-center border-b-4 border-red-400">
+            <h3 class="text-2xl font-bold text-red-600">💰 15%</h3>
+            <p class="text-gray-600 font-semibold">خفض التكلفة</p>
+          </div>
+        `;
+
+        // جدول التوصيات
+        recommendationTable.innerHTML = `
+          <table class="w-full text-center border-collapse rounded-xl overflow-hidden shadow">
+            <thead class="bg-secondary-blue-600 text-white">
+              <tr>
+                <th class="p-3">العنصر</th>
+                <th class="p-3">القيمة الحالية</th>
+                <th class="p-3">القيمة المقترحة</th>
+                <th class="p-3">التحسين</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <tr class="border-b">
+                <td class="p-3 font-semibold">المياه</td>
+                <td class="p-3">${payload.current_water} م³</td>
+                <td class="p-3">${(payload.current_water * 0.75).toFixed(1)} م³</td>
+                <td class="p-3 text-primary-green-700 font-bold">توفير 25%</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-semibold">السماد</td>
+                <td class="p-3">${payload.current_fertilizer}</td>
+                <td class="p-3">خفض بمقدار 20%</td>
+                <td class="p-3 text-primary-green-700 font-bold">تحسين الكفاءة</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+
       } catch (err) {
         aiOutput.innerHTML = `<p class='text-red-600'>⚠️ خطأ: ${err.message}</p>`;
       } finally {
         loadingState.classList.add("hidden");
         resultsSection.classList.remove("hidden");
+        resultsSection.scrollIntoView({ behavior: "smooth" });
       }
     });
   </script>
